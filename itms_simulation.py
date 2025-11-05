@@ -1,50 +1,10 @@
-"""
-ITMS Simulation - Integrated Traffic Management System (Individual Hackathon Submission)
 
-Program description:
-This script simulates a basic Integrated Traffic Management System (ITMS) focused on
-detecting common driver violations in a metro city: speeding and red-light crossing.
-It aggregates violations, computes fines, and prints a summary dashboard.
+DEFAULT_SPEED_LIMIT = 50  
+SPEED_TOLERANCE = 5  
+RED_LIGHT_FINE = 2000  
+SPEED_FINE_PER_KMPH = 100  
 
-Input format (stdin or piped file):
-Each line represents an event with fields separated by commas:
-timestamp,vehicle_id,location,speed(km/h),signal_state,action
-- timestamp: ISO format or any string
-- vehicle_id: e.g., KA01AB1234
-- location: string identifier for the sensor location
-- speed: integer or float (km/h)
-- signal_state: GREEN or RED (state of the traffic signal when vehicle passed)
-- action: PASS or TURN or LANE_CHANGE (used for extensibility)
 
-Example line:
-2025-11-05T09:12:33,KA01AB1234,MG_Road_01,68,RED,PASS
-
-How to run:
-$ python3 itms_simulation.py < events.csv
-or
-$ cat events.csv | python3 itms_simulation.py
-
-What it does:
-- Loads a small 'policy' with speed limits per location (default 50 km/h).
-- Detects speeding violations (speed > speed_limit + tolerance).
-- Detects red-light violations (signal_state == RED and action == PASS).
-- Assigns fines: speeding -> ₹100 per km/h over limit (rounded), red-light -> ₹2000 fixed.
-- Prints each violation and a final dashboard with counts and total fines per vehicle and overall.
-
-This is a simplified simulation intended as a demonstrator for a hackathon submission.
-"""
-
-import sys
-from collections import defaultdict
-import math
-
-# Policy (could be replaced by config or DB)
-DEFAULT_SPEED_LIMIT = 50  # km/h
-SPEED_TOLERANCE = 5  # km/h (below this no fine)
-RED_LIGHT_FINE = 2000  # INR
-SPEED_FINE_PER_KMPH = 100  # INR per km/h over the limit (rounded)
-
-# Example location-specific limits (override default)
 LOCATION_SPEED_LIMITS = {
     "MG_Road_01": 50,
     "Outer_Ring_2": 80,
